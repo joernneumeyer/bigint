@@ -12,7 +12,7 @@ namespace jn {
     std::vector<short> m_bytes;
     std::string m_string_representation;
     bool m_is_negative = false;
-    big(std::vector<short>&& data) : m_bytes(data) {
+    big(const std::vector<short>& data, bool is_negative = false) : m_bytes(data), m_is_negative(is_negative) {
       std::stringstream s;
       for (auto i = this->m_bytes.rbegin(); i != this->m_bytes.rend(); ++i) {
         s << *i;
@@ -99,6 +99,21 @@ namespace jn {
         else break;
       }
       return std::move(big(std::move(result_number)));
+    }
+    big operator-() const {
+      return std::move(big(this->m_bytes, !this->m_is_negative));
+    }
+    bool operator<(const big &other) const {
+      if (this->m_is_negative && !other.m_is_negative) return true;
+      else if (!this->m_is_negative && other.m_is_negative) return false;
+      else if (this->m_is_negative && this->m_bytes.size() > other.m_bytes.size()) return true;
+      else if (!this->m_is_negative && this->m_bytes.size() < other.m_bytes.size()) return true;
+      else {
+        for (size_t i = 0; i < this->m_bytes.size(); ++i) {
+          if (this->m_bytes[i] > other.m_bytes[i]) return false;
+        }
+        return this->m_bytes[this->m_bytes.size() - 1] < other.m_bytes[other.m_bytes.size() - 1];
+      }
     }
     std::string to_string() const {
       return this->m_string_representation;
