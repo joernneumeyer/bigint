@@ -124,6 +124,9 @@ namespace jn {
       }
       else return false;
     }
+    bool operator!=(const big &other) const {
+      return !(*this == other);
+    }
     std::string to_string() const {
       return this->m_string_representation;
     }
