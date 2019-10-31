@@ -100,6 +100,34 @@ namespace jn {
       }
       return std::move(big(std::move(result_number)));
     }
+    big multiply(const big& other) const {
+      big result;
+      std::vector<big> nums;
+      nums.reserve(other.m_bytes.size());
+      int f = 0;
+      for (auto  a : other.m_bytes) {
+        std::vector<short> foo;
+        for (int i = 0; i < f; ++i)
+          foo.push_back(0);
+        ++f;
+        short bump = 0;
+        for (auto b : this->m_bytes) {
+          short c = a * b + bump;
+          bump = 0;
+          if (c > 99) {
+            bump = c / 100;
+            c %= 100;
+          }
+          foo.push_back(c);
+        }
+        if (bump) foo.push_back(bump);
+        nums.push_back(std::move(big(foo, false)));
+      }
+      for (const auto &num : nums) {
+        result = std::move(result.add(num));
+      }
+      return std::move(result);
+    }
     big operator-() const {
       return std::move(big(this->m_bytes, !this->m_is_negative));
     }
