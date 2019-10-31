@@ -1,8 +1,13 @@
 #include <iostream>
+#include <cstring>
 
 #include "bigint.hpp"
 
 int main() {
-  jn::big a("445");
-  std::cout << a.add("555") << std::endl;
+  std::cout << "equal: "     << (std::strcmp(jn::big("200").to_string().c_str(), "200") == 0) << std::endl;
+  std::cout << "larger: "    << (jn::big("65436541") > "9875")                                << std::endl;
+  std::cout << "1 smaller: "   << (jn::big("564") < "9875")                                   << std::endl;
+  std::cout << "2 smaller: "   << (jn::big("56444") < "98754")                                << std::endl;
+  std::cout << "equal: "     << (jn::big("65436541") == "65436541")                           << std::endl;
+  std::cout << "not equal: " << (jn::big("65436541") != "75436541")                           << std::endl;
 }
