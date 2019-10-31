@@ -1,7 +1,6 @@
 #pragma once
 
 #include <algorithm>
-#include <iostream>
 #include <ostream>
 #include <sstream>
 #include <string>
@@ -29,12 +28,10 @@ namespace jn {
       const char *value_p = value.c_str();
       size_t limit = value.size() / 2;
       this->m_bytes.reserve(limit);
-      for (size_t i = 0; i < limit; ++i) {
+      for (size_t i = 0; i < limit; ++i)
         this->m_bytes.push_back((value[i * 2] - 48 + ((value[i * 2 + 1] - 48) * 10)));
-      }
-      if (value.size() % 2) {
+      if (value.size() % 2)
         this->m_bytes.push_back(value[value.size() - 1] - 48);
-      }
     }
 
     big add(const big& other) const {
