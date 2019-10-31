@@ -117,7 +117,7 @@ namespace jn {
       if (this->m_is_negative && !other.m_is_negative) return false;
       else if (!this->m_is_negative && other.m_is_negative) return true;
       else if (this->m_is_negative && this->m_bytes.size() > other.m_bytes.size()) return false;
-      else if (!this->m_is_negative && this->m_bytes.size() < other.m_bytes.size()) return false;
+      else if (!this->m_is_negative && this->m_bytes.size() > other.m_bytes.size()) return true;
       else
         for (size_t i = 0; i < this->m_bytes.size(); ++i)
           if (this->m_bytes[i] < other.m_bytes[i]) return false;
