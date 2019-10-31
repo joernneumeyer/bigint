@@ -59,7 +59,7 @@ namespace jn {
       size_t min = std::min(this->m_bytes.size(), other.m_bytes.size());
       bool bump = false;
       for (size_t i = 0; i < min; ++i) {
-        short a = (short)this->m_bytes[i] + (short)other.m_bytes[i] + bump;
+        short a = this->m_bytes[i] + other.m_bytes[i] + bump;
         bump = false;
         if (a > 99) {
           bump = true;
@@ -89,7 +89,7 @@ namespace jn {
       size_t min = std::min(this->m_bytes.size(), other.m_bytes.size());
       bool bump = false;
       for (size_t i = 0; i < min; ++i) {
-        short a = (short)this->m_bytes[i] - (short)other.m_bytes[i] - bump;
+        short a = this->m_bytes[i] - other.m_bytes[i] - bump;
         bump = false;
         if (a < 0) {
           bump = true;
