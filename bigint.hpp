@@ -11,6 +11,7 @@ namespace jn {
   private:
     std::vector<short> m_bytes;
     std::string m_string_representation;
+    bool m_is_negative = false;
     big(std::vector<short>&& data) : m_bytes(data) {
       std::stringstream s;
       for (auto i = this->m_bytes.rbegin(); i != this->m_bytes.rend(); ++i) {
@@ -23,7 +24,8 @@ namespace jn {
   public:
     big() { }
     big(const char *value) : big(std::move(std::string(value))) { }
-    big(std::string value) : m_string_representation(value) {
+    big(std::string value) : m_string_representation(value), m_is_negative(value[0] == '-') {
+      if (m_is_negative) value = value.substr(1);
       std::reverse(value.begin(), value.end());
       const char *value_p = value.c_str();
       size_t limit = value.size() / 2;
@@ -35,6 +37,7 @@ namespace jn {
     }
 
     big add(const big& other) const {
+      // TODO take negative numbers into account
       std::vector<short> result_number;
       size_t min = std::min(this->m_bytes.size(), other.m_bytes.size());
       bool bump = false;
@@ -62,7 +65,9 @@ namespace jn {
       if (bump) result_number.push_back(1);
       return std::move(big(std::move(result_number)));
     }
+    
     big subtract(const big& other) const {
+      // TODO take negative numbers into account
       std::vector<short> result_number;
       size_t min = std::min(this->m_bytes.size(), other.m_bytes.size());
       bool bump = false;
