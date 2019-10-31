@@ -39,6 +39,7 @@ namespace jn {
     }
 
   public:
+    const static big ZERO;
     big() { }
     big(const char *value) : big(std::move(std::string(value))) { }
     big(std::string value) : m_string_representation(value), m_is_negative(value[0] == '-') {
@@ -55,6 +56,14 @@ namespace jn {
 
     big add(const big& other) const {
       // TODO take negative numbers into account
+      if (this->m_is_negative && !other.m_is_negative) {
+        const big inverted = -(*this);
+        if (*this == other) return ZERO;
+        else if (other > inverted) return other.subtract(inverted);
+        else {
+          
+        }
+      }
       std::vector<short> result_number;
       size_t min = std::min(this->m_bytes.size(), other.m_bytes.size());
       bool bump = false;
@@ -80,7 +89,7 @@ namespace jn {
         }
       }
       if (bump) result_number.push_back(1);
-      return std::move(big(std::move(result_number)));
+      return std::move(big(std::move(result_number), this->m_is_negative));
     }
 
     big subtract(const big& other) const {
@@ -143,10 +152,26 @@ namespace jn {
       for (const auto &num : nums) {
         result = std::move(result.add(num));
       }
+      result.m_is_negative = this->m_is_negative == other.m_is_negative;
       return std::move(result);
+    }
+    big abs() const {
+      return std::move(big(this->m_bytes, false));
     }
     big operator-() const {
       return std::move(big(this->m_bytes, !this->m_is_negative));
+    }
+    big operator-(const big &other) {
+      return std::move(this->subtract(other));
+    }
+    big operator+(const big &other) {
+      return std::move(this->add(other));
+    }
+    big operator*(const big &other) {
+      return std::move(this->multiply(other));
+    }
+    operator std::string() const {
+      return this->m_string_representation;
     }
     bool operator<(const big &other) const {
       if (this->m_is_negative && !other.m_is_negative) return true;
@@ -190,6 +215,8 @@ namespace jn {
       return this->m_string_representation;
     }
   };
+
+  const big big::ZERO = "0";
 }
 
 std::ostream& operator<<(std::ostream& o, const jn::big& b) {
