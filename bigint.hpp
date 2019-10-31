@@ -136,6 +136,12 @@ namespace jn {
       }
       else return false;
     }
+    bool operator>=(const big &other) const {
+      return *this == other || *this > other;
+    }
+    bool operator<=(const big &other) const {
+      return *this == other || *this < other;
+    }
     bool operator!=(const big &other) const {
       return !(*this == other);
     }
