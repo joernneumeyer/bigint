@@ -23,6 +23,10 @@
 #include <string>
 #include <vector>
 
+namespace jn { class big; }
+
+std::ostream& operator<<(std::ostream& o, const jn::big& b);
+
 namespace jn {
   class big {
   private:
@@ -31,6 +35,7 @@ namespace jn {
     bool m_is_negative = false;
     big(const std::vector<short>& data, bool is_negative = false) : m_bytes(data), m_is_negative(is_negative) {
       std::stringstream s;
+      if (is_negative) s << '-';
       for (auto i = this->m_bytes.rbegin(); i != this->m_bytes.rend(); ++i) {
         s << *i;
         if (*i == 0) s << '0';
@@ -55,15 +60,12 @@ namespace jn {
     }
 
     big add(const big& other) const {
-      // TODO take negative numbers into account
       if (this->m_is_negative && !other.m_is_negative) {
         const big inverted = -(*this);
-        if (*this == other) return ZERO;
-        else if (other > inverted) return other.subtract(inverted);
-        else {
-          
-        }
-      }
+        if (inverted == other) return ZERO;
+        else if (other > inverted) return std::move(other.subtract(inverted));
+        else return std::move(-(inverted.subtract(other)));
+      } else if (!this->m_is_negative && other.m_is_negative) return std::move(other.add(*this));
       std::vector<short> result_number;
       size_t min = std::min(this->m_bytes.size(), other.m_bytes.size());
       bool bump = false;
@@ -108,10 +110,8 @@ namespace jn {
       }
       if (this->m_bytes.size() != other.m_bytes.size()) {
         auto longer = this->m_bytes.size() == min ? &other.m_bytes : &this->m_bytes;
-        std::cout << min << '|' << longer->size() << std::endl;
         for (size_t i = min; i < longer->size(); ++i) {
           auto a = (*longer)[i] - bump;
-          std::cout << "a: " << a << std::endl;
           bump = false;
           if (a < 0) {
             a = 100 + a;
@@ -171,7 +171,7 @@ namespace jn {
       return std::move(this->multiply(other));
     }
     operator std::string() const {
-      return this->m_string_representation;
+      return this->to_string();
     }
     bool operator<(const big &other) const {
       if (this->m_is_negative && !other.m_is_negative) return true;
