@@ -44,5 +44,7 @@ int main() {
   assertEqual<std::string>("add", "420", jn::big("-400").add("820"));
   assertEqual<std::string>("subtract", "-420", jn::big("400").subtract("820"));
   assertEqual<std::string>("subtract", "-1220", jn::big("-400").subtract("820"));
+  assertEqual("negation", jn::big("-400"), -jn::big("400"));
+  assertEqual("negation", jn::big("400"), -jn::big("-400"));
   std::cout << "Assertions/Errors: " << assertions << '/' << errors << std::endl;
 }
