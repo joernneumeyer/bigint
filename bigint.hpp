@@ -62,7 +62,25 @@ namespace jn {
       if (bump) result_number.push_back(1);
       return std::move(big(std::move(result_number)));
     }
-    big subtract(const big& other) const;
+    big subtract(const big& other) const {
+      std::vector<short> result_number;
+      size_t min = std::min(this->m_bytes.size(), other.m_bytes.size());
+      bool bump = false;
+      for (size_t i = 0; i < min; ++i) {
+        short a = (short)this->m_bytes[i] - (short)other.m_bytes[i] - bump;
+        bump = false;
+        if (a < 0) {
+          bump = true;
+          a =  - a;
+        }
+        result_number.push_back(a);
+      }
+      while (result_number.size()) {
+        if (result_number[result_number.size() - 1] == 0) result_number.pop_back();
+        else break;
+      }
+      return std::move(big(std::move(result_number)));
+    }
     std::string to_string() const {
       return this->m_string_representation;
     }
