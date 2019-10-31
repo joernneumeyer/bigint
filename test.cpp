@@ -3,11 +3,16 @@
 
 #include "bigint.hpp"
 
+size_t assertions = 0;
+size_t errors = 0;
+
 void assert(const std::string &name, bool condition, std::initializer_list<std::string> error_messages = { }) {
+  ++assertions;
   std::cout << "testing '" << name << "': ";
   if (condition) {
     std::cout << "successful";
   } else {
+    ++errors;
     std::cout << "failed! Message: ";
     if (error_messages.size()) for (const auto &a : error_messages) std::cout << a << ' ';
     else std::cout << "[none]";
@@ -37,4 +42,7 @@ int main() {
   assertEqual<std::string>("multiply", "64262968528", jn::big("85492").multiply("751684"));
   assertEqual<std::string>("add", "-400", jn::big("400").add("-800"));
   assertEqual<std::string>("add", "420", jn::big("-400").add("820"));
+  assertEqual<std::string>("subtract", "-420", jn::big("400").subtract("820"));
+  assertEqual<std::string>("subtract", "-1220", jn::big("-400").subtract("820"));
+  std::cout << "Assertions/Errors: " << assertions << '/' << errors << std::endl;
 }
