@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 
-#include "bigint.hpp"
+#include "big.hpp"
 
 size_t assertions = 0;
 size_t errors = 0;
