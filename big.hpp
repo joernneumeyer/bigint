@@ -96,6 +96,7 @@ namespace jn {
 
     big subtract(const big& other) const {
       // TODO take negative numbers into account
+      if (this->m_is_negative && other.m_is_negative) return std::move(this->add(other));
       std::vector<short> result_number;
       size_t min = std::min(this->m_bytes.size(), other.m_bytes.size());
       bool bump = false;
