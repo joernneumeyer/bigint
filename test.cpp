@@ -44,6 +44,7 @@ int main() {
   assertEqual<jn::big>("add", "420", jn::big("-400").add("820"));
   assertEqual<jn::big>("subtract", "-420", jn::big("400").subtract("820"));
   assertEqual<jn::big>("subtract", "-1270", jn::big("-450").subtract("820"));
+  assertEqual<jn::big>("subtract", "-1250", jn::big("-450").subtract("-800"));
   assertEqual("negation", jn::big("-400"), -jn::big("400"));
   assertEqual("negation", jn::big("400"), -jn::big("-400"));
   assertEqual<jn::big>("negative multiply", "-25", jn::big("5").multiply("-5"));
