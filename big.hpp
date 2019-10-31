@@ -152,8 +152,10 @@ namespace jn {
       for (const auto &num : nums) {
         result = std::move(result.add(num));
       }
-      result.m_is_negative = this->m_is_negative == other.m_is_negative;
-      return std::move(result);
+      if ((this->m_is_negative && other.m_is_negative) || (!this->m_is_negative && !other.m_is_negative))
+        return std::move(result);
+      else
+        return std::move(-result);
     }
     big abs() const {
       return std::move(big(this->m_bytes, false));
