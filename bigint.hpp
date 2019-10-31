@@ -51,7 +51,7 @@ namespace jn {
         result_number.push_back(a);
       }
       if (this->m_bytes.size() != other.m_bytes.size()) {
-        auto longer = this->m_bytes.size() == min ? &this->m_bytes : &other.m_bytes;
+        auto longer = this->m_bytes.size() == min ? &other.m_bytes : &this->m_bytes;
         for (size_t i = min; i < longer->size(); ++i) {
           auto a = (*longer)[i] + bump;
           bump = false;
@@ -65,7 +65,7 @@ namespace jn {
       if (bump) result_number.push_back(1);
       return std::move(big(std::move(result_number)));
     }
-    
+
     big subtract(const big& other) const {
       // TODO take negative numbers into account
       std::vector<short> result_number;
@@ -76,9 +76,23 @@ namespace jn {
         bump = false;
         if (a < 0) {
           bump = true;
-          a =  - a;
+          a = 100 + a;
         }
         result_number.push_back(a);
+      }
+      if (this->m_bytes.size() != other.m_bytes.size()) {
+        auto longer = this->m_bytes.size() == min ? &other.m_bytes : &this->m_bytes;
+        std::cout << min << '|' << longer->size() << std::endl;
+        for (size_t i = min; i < longer->size(); ++i) {
+          auto a = (*longer)[i] - bump;
+          std::cout << "a: " << a << std::endl;
+          bump = false;
+          if (a < 0) {
+            a = 100 + a;
+            bump = true;
+          }
+          result_number.push_back(a);
+        }
       }
       while (result_number.size()) {
         if (result_number[result_number.size() - 1] == 0) result_number.pop_back();
