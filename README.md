@@ -1,5 +1,6 @@
 # bigint
 A simple big int implementation for C++.
+The class is located at `jn::big`.
 
 ## TODO
 - subtraction with negative numbers
