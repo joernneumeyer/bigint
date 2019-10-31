@@ -115,6 +115,15 @@ namespace jn {
         return this->m_bytes[this->m_bytes.size() - 1] < other.m_bytes[other.m_bytes.size() - 1];
       }
     }
+    bool operator==(const big &other) const {
+      if (this->m_is_negative == other.m_is_negative && this->m_bytes.size() == other.m_bytes.size()) {
+        for (size_t i = 0; i < this->m_bytes.size(); ++i)
+          if (this->m_bytes[i] != other.m_bytes[i])
+            return false;
+        return true;
+      }
+      else return false;
+    }
     std::string to_string() const {
       return this->m_string_representation;
     }
