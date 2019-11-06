@@ -23,10 +23,6 @@
 #include <string>
 #include <vector>
 
-namespace jn { class big; }
-
-std::ostream& operator<<(std::ostream& o, const jn::big& b);
-
 namespace jn {
   class big {
   private:

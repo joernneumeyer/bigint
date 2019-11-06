@@ -30,7 +30,8 @@ jn::big::big(std::string value) : m_string_representation(value), m_is_negative(
     this->m_bytes.push_back(value[value.size() - 1] - 48);
 }
 
-jn::big::big(const std::vector<short>& data, bool is_negative = false) : m_bytes(data), m_is_negative(is_negative) {
+jn::big::big(const std::vector<short>& data, bool is_negative)
+: m_bytes(data), m_is_negative(is_negative) {
   std::stringstream s;
   if (is_negative) s << '-';
   for (auto i = this->m_bytes.rbegin(); i != this->m_bytes.rend(); ++i) {
@@ -40,7 +41,7 @@ jn::big::big(const std::vector<short>& data, bool is_negative = false) : m_bytes
   this->m_string_representation = s.str();
 }
 
-jn::big jn::big::add(const jn::big::big& other) const {
+jn::big jn::big::add(const big& other) const {
   if (this->m_is_negative && !other.m_is_negative) {
     const big inverted = -(*this);
     if (inverted == other) return "0";
@@ -75,7 +76,7 @@ jn::big jn::big::add(const jn::big::big& other) const {
   return std::move(big(std::move(result_number), this->m_is_negative));
 }
 
-jn::big jn::big::subtract(const jn::big::big& other) const {
+jn::big jn::big::subtract(const big& other) const {
   // TODO take negative numbers into account
   if (this->m_is_negative && other.m_is_negative) return std::move(this->add(other));
   std::vector<short> result_number;
@@ -141,25 +142,25 @@ jn::big jn::big::multiply(const big& other) const {
     return std::move(-result);
 }
 
-jn::big::big jn::big::abs() const {
+jn::big jn::big::abs() const {
   return std::move(big(this->m_bytes, false));
 }
-jn::big::big jn::big::operator-() const {
+jn::big jn::big::operator-() const {
   return std::move(big(this->m_bytes, !this->m_is_negative));
 }
-jn::big::big jn::big::operator-(const big &other) const {
+jn::big jn::big::operator-(const big &other) const {
   return std::move(this->subtract(other));
 }
-jn::big::big jn::big::operator+(const big &other) const {
+jn::big jn::big::operator+(const big &other) const {
   return std::move(this->add(other));
 }
-jn::big::big jn::big::operator*(const jn::big::big &other) const {
+jn::big jn::big::operator*(const big &other) const {
   return std::move(this->multiply(other));
 }
 jn::big::operator std::string() const {
   return this->to_string();
 }
-bool jn::big::operator<(const jn::big::big &other) const {
+bool jn::big::operator<(const big &other) const {
   if (this->m_is_negative && !other.m_is_negative) return true;
   else if (!this->m_is_negative && other.m_is_negative) return false;
   else if (this->m_is_negative && this->m_bytes.size() > other.m_bytes.size()) return true;
@@ -169,7 +170,7 @@ bool jn::big::operator<(const jn::big::big &other) const {
       if (this->m_bytes[i] > other.m_bytes[i]) return false;
   return this->m_bytes[this->m_bytes.size() - 1] < other.m_bytes[other.m_bytes.size() - 1];
 }
-bool jn::big::operator>(const jn::big::big &other) const {
+bool jn::big::operator>(const big &other) const {
   if (this->m_is_negative && !other.m_is_negative) return false;
   else if (!this->m_is_negative && other.m_is_negative) return true;
   else if (this->m_is_negative && this->m_bytes.size() > other.m_bytes.size()) return false;
@@ -179,7 +180,7 @@ bool jn::big::operator>(const jn::big::big &other) const {
       if (this->m_bytes[i] < other.m_bytes[i]) return false;
   return this->m_bytes[this->m_bytes.size() - 1] > other.m_bytes[other.m_bytes.size() - 1];
 }
-bool jn::big::operator==(const jn::big::big &other) const {
+bool jn::big::operator==(const big &other) const {
   if (this->m_is_negative == other.m_is_negative && this->m_bytes.size() == other.m_bytes.size()) {
     for (size_t i = 0; i < this->m_bytes.size(); ++i)
       if (this->m_bytes[i] != other.m_bytes[i])
@@ -188,24 +189,18 @@ bool jn::big::operator==(const jn::big::big &other) const {
   }
   else return false;
 }
-bool jn::big::operator>=(const jn::big::big &other) const {
+bool jn::big::operator>=(const big &other) const {
   return *this == other || *this > other;
 }
-bool jn::big::operator<=(const jn::big::big &other) const {
+bool jn::big::operator<=(const big &other) const {
   return *this == other || *this < other;
 }
-bool jn::big::operator!=(const jn::big::big &other) const {
+bool jn::big::operator!=(const big &other) const {
   return !(*this == other);
 }
 std::string jn::big::to_string() const {
   return this->m_string_representation;
 }
-
-
-
-
-
-
 
 std::ostream& operator<<(std::ostream& o, const jn::big& b) {
   return o << b.to_string();
