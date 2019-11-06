@@ -77,8 +77,9 @@ jn::big jn::big::add(const big& other) const {
 }
 
 jn::big jn::big::subtract(const big& other) const {
-  if (this->m_is_negative && other.m_is_negative) return std::move(this->add(other));
-  else if (other > *this) return std::move(-other.subtract(*this));
+  if (this->m_is_negative && other.m_is_negative) return std::move(this->abs().add(other.abs()).invert());
+  else if (this->m_is_negative && !other.m_is_negative) return std::move(this->invert().add(other).invert());
+  else if (other > *this) return std::move(other.subtract(*this).invert());
   std::vector<short> result_number;
   size_t min = std::min(this->m_bytes.size(), other.m_bytes.size());
   bool bump = false;
