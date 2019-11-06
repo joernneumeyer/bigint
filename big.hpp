@@ -42,6 +42,7 @@ namespace jn {
     big abs() const;
     big max(big& other) const;
     big min(big& other) const;
+    big invert() const;
     big operator-() const;
     big operator-(const big &other) const;
     big operator+(const big &other) const;

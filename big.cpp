@@ -151,6 +151,9 @@ jn::big jn::big::max(big& other) const {
 jn::big jn::big::min(big& other) const {
   return *this < other ? *this : other;
 }
+jn::big jn::big::invert() const {
+  return std::move(-(*this));
+}
 jn::big jn::big::operator-() const {
   return std::move(big(this->m_bytes, !this->m_is_negative));
 }
