@@ -30,6 +30,16 @@ jn::big::big(std::string value) : m_string_representation(value), m_is_negative(
     this->m_bytes.push_back(value[value.size() - 1] - 48);
 }
 
+jn::big::big(const std::vector<short>& data, bool is_negative = false) : m_bytes(data), m_is_negative(is_negative) {
+  std::stringstream s;
+  if (is_negative) s << '-';
+  for (auto i = this->m_bytes.rbegin(); i != this->m_bytes.rend(); ++i) {
+    s << *i;
+    if (*i == 0) s << '0';
+  }
+  this->m_string_representation = s.str();
+}
+
 jn::big jn::big::add(const jn::big::big& other) const {
   if (this->m_is_negative && !other.m_is_negative) {
     const big inverted = -(*this);

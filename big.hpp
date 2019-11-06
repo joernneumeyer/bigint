@@ -33,15 +33,7 @@ namespace jn {
     std::vector<short> m_bytes;
     std::string m_string_representation;
     bool m_is_negative = false;
-    big(const std::vector<short>& data, bool is_negative = false) : m_bytes(data), m_is_negative(is_negative) {
-      std::stringstream s;
-      if (is_negative) s << '-';
-      for (auto i = this->m_bytes.rbegin(); i != this->m_bytes.rend(); ++i) {
-        s << *i;
-        if (*i == 0) s << '0';
-      }
-      this->m_string_representation = s.str();
-    }
+    big(const std::vector<short>& data, bool is_negative = false);
 
   public:
     big() { }
